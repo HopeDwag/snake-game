@@ -186,13 +186,38 @@ function paint(username, high_score) {
 
 
 
-		$(document).keydown(function(e) {
-			var key = e.which;
-			if (key == '37' && d != 'right') d = 'left';
-			else if (key == '38' && d != 'down') d = 'up';
-			else if (key == '39' && d != 'left') d = 'right';
-			else if (key == '40' && d != 'up') d = 'down';
-		});
+$(document).on({
+  'touchstart': function(e) {
+    touchStartX = e.changedTouches[0].pageX;
+    touchStartY = e.changedTouches[0].pageY;
+  },
+  'touchmove': function(e) {
+    e.preventDefault();
+    touchEndX = e.changedTouches[0].pageX;
+    touchEndY = e.changedTouches[0].pageY;
+    handleSwipe();
+  }
+});
+
+function handleSwipe() {
+  var xDiff = touchStartX - touchEndX;
+  var yDiff = touchStartY - touchEndY;
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    if (xDiff > 0 && d != 'right') d = 'left';
+    else if (xDiff < 0 && d != 'left') d = 'right';
+  } else {
+    if (yDiff > 0 && d != 'down') d = 'up';
+    else if (yDiff < 0 && d != 'up') d = 'down';
+  }
+}
+
+$(document).keydown(function(e) {
+  var key = e.which;
+  if (key == '37' && d != 'right') d = 'left';
+  else if (key == '38' && d != 'down') d = 'up';
+  else if (key == '39' && d != 'left') d = 'right';
+  else if (key == '40' && d != 'up') d = 'down';
+});
 
         var messageBox = document.getElementById("message-box");
 

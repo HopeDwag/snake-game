@@ -9,7 +9,8 @@
   <tbody>
 {% for entry in entries %}
     <tr>
-        <td>{{ entry['username'] }}</td>
+        <td>{{ loop.index }}</td>
+        <td>{{ entry['username'] -}}</td>
         <td>{{ entry['score'] }}</td>
     </tr>
 {% endfor %}

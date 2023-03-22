@@ -8,11 +8,13 @@ app = Flask(__name__)
 # leaderboard_path = '/data/leaderboard.json'
 leaderboard_path = 'leaderboard.json'
 
+
 @app.route('/')
 def health_check():
     # Perform any necessary checks here to determine if the application is ready
     # to receive traffic. If everything is okay, return a 200 OK response.
     return 'OK', 200
+
 
 @app.route('/snake')
 def snake():
@@ -21,16 +23,30 @@ def snake():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    print(request.json)
+    # retrieve username and score from request JSON data
     username = request.json['username']
     score = int(request.json['score'])
     entry = {'username': username, 'score': score}
-    # append the new entry to the JSON file
+
+    # check if the user already exists in the leaderboard
     with open(leaderboard_path, 'r') as f:
         entries = json.load(f)
-    entries.append(entry)
+    for e in entries:
+        if e['username'] == username:
+            # if the new score is higher, update the existing entry
+            if score > e['score']:
+                e['score'] = score
+            # otherwise, don't add the entry to the leaderboard
+            break  # exit loop once user has been found and updated
+
+    # add the new entry to the leaderboard if user not already in leaderboard
+    else:
+        entries.append(entry)
+
+    # write updated leaderboard to file
     with open(leaderboard_path, 'w') as f:
         json.dump(entries, f, indent=4)
+
     return render_template('snake.html', username=username)
 
 
@@ -48,7 +64,6 @@ def high_score(username):
         leaderboard = json.load(f)
     for user in leaderboard:
         if user['username'] == username:
-            print(str(user['score']))
             return str(user['score'])
     return "0"
 
