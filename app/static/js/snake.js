@@ -11,19 +11,12 @@ $(document).ready(function() {
 			var speed;
 			var high_score;
 			var username;
-//			window.location.port = '5000';
-//            window.location.protocol = 'http:';
-//            window.location.hostname = 'snake-game';
-
-//            const baseUrl = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
-//            const baseUrl = "http://snake-game:5000";
 
 			async function get_high_score(user_name) {
               try {
                 const response = await $.ajax({
                   type: "GET",
                   url: "/high_score/" + user_name,
-//                  url: baseUrl + "/high_score/" + user_name,
                   dataType: "json"
                 });
                 console.log("User's previous high score: " + response);
@@ -60,9 +53,9 @@ $(document).ready(function() {
             console.log(`${high_score}`)
 
 			  if (score < 10) {
-				speed = speed - 10;
+				speed = speed - 5;
 			  } else if (score < 20) {
-				speed = speed -5;
+				speed = speed -2;
 			  } else if (score < 30) {
 				speed = speed -1;
 			  }
@@ -86,6 +79,24 @@ $(document).ready(function() {
 					y: Math.round(Math.random() * (h - cw) / cw),
 				};
 			}
+
+//			function create__bonus_food() {
+//                  // Generate a random x and y position for the food
+//                  var foodX = Math.floor(Math.random() * (w - foodSize));
+//                  var foodY = Math.floor(Math.random() * (h - foodSize));
+//
+//                  // Create a new food object with the generated position and size
+//                  var food = {
+//                    x: foodX,
+//                    y: foodY,
+//                    width: foodSize,
+//                    height: foodSize,
+//                    timer: 5 // Set the timer for 5 seconds
+//                  };
+//
+//                  // Push the new food object to the food array
+//                  foodArray.push(food);
+//                }
 
 function paint(username, high_score) {
     console.log("paint")
@@ -140,7 +151,7 @@ function paint(username, high_score) {
 
 				for (var i = 0; i < snake_array.length; i++) {
 					var c = snake_array[i];
-					paint_cell(c.x , c.y, 'white');
+					paint_cell(c.x , c.y, 'green');
                 }
         			paint_cell(food.x, food.y, 'red');
 
